@@ -9,6 +9,8 @@ import {
 	onGetLastPriceBitcoin,
 	onGetOperations,
 } from '../Operations/OperationsController';
+
+import { ACAO, BITCOIN, FUNDO_IMOBILIARIO } from '../constants';
 import {
 	numberToDecimal,
 	numberToReais,
@@ -40,10 +42,9 @@ class Balance extends React.Component {
 		let lastUnitPrice;
 		const { _id, assetClass, ticker } = asset;
 		try {
-			if (assetClass === 'Bitcoin')
-				lastUnitPrice = await onGetLastPriceBitcoin();
+			if (assetClass === BITCOIN) lastUnitPrice = await onGetLastPriceBitcoin();
 			const tickerService =
-				assetClass === 'Ações' || assetClass === 'FIIs'
+				assetClass === ACAO || assetClass === FUNDO_IMOBILIARIO
 					? ticker + '.SA'
 					: ticker;
 			lastUnitPrice = await onGetLastPrice(tickerService);

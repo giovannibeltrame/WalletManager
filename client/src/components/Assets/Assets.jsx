@@ -5,6 +5,21 @@ import { onGetAssets, onPostAssets, onDeleteAssets } from './AssetsController';
 import { onGetClasses } from '../Classes/ClassesController';
 import history from '../history';
 
+import {
+	ADD_ASSET_SUCCESS,
+	ADD_ASSET_ERROR,
+	DELETE_ASSET_SUCCESS,
+	DELETE_ASSET_ERROR,
+	BROKER_AVENUE,
+	BROKER_BANCO_INTER,
+	BROKER_BISCOINT,
+	BROKER_CLEAR,
+	BROKER_ORAMA,
+	BROKER_RICO,
+	BRL,
+	USD,
+} from '../constants';
+
 class Assets extends React.Component {
 	state = {
 		assets: [],
@@ -62,13 +77,13 @@ class Assets extends React.Component {
 				this.state.ticker
 			);
 			this.setState({
-				message: 'Ativo incluído com sucesso!',
+				message: ADD_ASSET_SUCCESS,
 				variantMessage: 'success',
 				assets: await onGetAssets(),
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar incluir ativo',
+				message: ADD_ASSET_ERROR,
 				variantMessage: 'danger',
 			});
 		}
@@ -78,13 +93,13 @@ class Assets extends React.Component {
 		try {
 			await onDeleteAssets(_id);
 			this.setState({
-				message: 'Ativo excluído com sucesso!',
+				message: DELETE_ASSET_SUCCESS,
 				variantMessage: 'warning',
 				assets: await onGetAssets(),
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar excluir ativo',
+				message: DELETE_ASSET_ERROR,
 				variantMessage: 'danger',
 			});
 		}
@@ -179,8 +194,8 @@ class Assets extends React.Component {
 								onChange={this.handleChangeCurrency}
 							>
 								<option />
-								<option>BRL</option>
-								<option>USD</option>
+								<option>{BRL}</option>
+								<option>{USD}</option>
 							</Form.Control>
 						</Col>
 						<Col>
@@ -191,12 +206,12 @@ class Assets extends React.Component {
 								onChange={this.handleChangeBroker}
 							>
 								<option />
-								<option>Avenue</option>
-								<option>Banco Inter</option>
-								<option>Biscoint</option>
-								<option>Clear</option>
-								<option>Órama</option>
-								<option>Rico</option>
+								<option>{BROKER_AVENUE}</option>
+								<option>{BROKER_BANCO_INTER}</option>
+								<option>{BROKER_BISCOINT}</option>
+								<option>{BROKER_CLEAR}</option>
+								<option>{BROKER_ORAMA}</option>
+								<option>{BROKER_RICO}</option>
 							</Form.Control>
 						</Col>
 					</Form.Row>

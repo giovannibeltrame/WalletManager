@@ -17,6 +17,23 @@ import {
 	onGetOperations,
 	onDeleteOperations,
 } from '../OperationsController';
+
+import {
+	ADD_OPERATION_SUCCESS,
+	ADD_OPERATION_ERROR,
+	DELETE_OPERATION_SUCCESS,
+	DELETE_OPERATION_ERROR,
+	REFRESH_GROSS_BALANCE_SUCCESS,
+	REFRESH_GROSS_BALANCE_ERROR,
+	APPLICATION,
+	RESCUE,
+	TOTAL_APPLIED,
+	TOTAL_RESCUED,
+	TOTAL_COSTS,
+	GROSS_BALANCE,
+	RESULT,
+	PERCENTAGE_RESULT,
+} from '../../constants';
 import {
 	numberToReais,
 	numberToPercentage,
@@ -61,13 +78,13 @@ class FixIncomeOperations extends React.Component {
 		try {
 			await onPostOperations({ ...this.state, assetId: _id });
 			this.setState({
-				message: 'Operação incluída com sucesso!',
+				message: ADD_OPERATION_SUCCESS,
 				variantMessage: 'success',
 				operations: await onGetOperations(_id),
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar incluir operação',
+				message: ADD_OPERATION_ERROR,
 				variantMessage: 'danger',
 			});
 		}
@@ -85,12 +102,12 @@ class FixIncomeOperations extends React.Component {
 				lastRefreshedDate,
 			});
 			this.setState({
-				message: 'Saldo bruto atualizado com sucesso!',
+				message: REFRESH_GROSS_BALANCE_SUCCESS,
 				variantMessage: 'success',
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar incluir operação',
+				message: REFRESH_GROSS_BALANCE_ERROR,
 				variantMessage: 'danger',
 			});
 		}
@@ -174,13 +191,13 @@ class FixIncomeOperations extends React.Component {
 		try {
 			await onDeleteOperations(_id);
 			this.setState({
-				message: 'Operação excluída com sucesso!',
+				message: DELETE_OPERATION_SUCCESS,
 				variantMessage: 'warning',
 				operations: await onGetOperations(this.props.asset._id),
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar excluir operação',
+				message: DELETE_OPERATION_ERROR,
 				variantMessage: 'danger',
 			});
 		}
@@ -256,7 +273,7 @@ class FixIncomeOperations extends React.Component {
 		return (
 			<div>
 				<Badge variant='info' className='w-50 mr-2'>
-					VALOR APLICADO
+					{TOTAL_APPLIED}
 				</Badge>
 				<span>{numberToReais(totalApplied)}</span>
 			</div>
@@ -267,7 +284,7 @@ class FixIncomeOperations extends React.Component {
 		return (
 			<div>
 				<Badge variant='warning' className='w-50 mr-2'>
-					VALOR RESGATADO
+					{TOTAL_RESCUED}
 				</Badge>
 				<span>{numberToReais(totalRescued)}</span>
 			</div>
@@ -278,7 +295,7 @@ class FixIncomeOperations extends React.Component {
 		return (
 			<div>
 				<Badge variant='danger' className='w-50 mr-2'>
-					TOTAL EM CUSTOS
+					{TOTAL_COSTS}
 				</Badge>
 				<span>{numberToReais(totalCosts)}</span>
 			</div>
@@ -289,7 +306,7 @@ class FixIncomeOperations extends React.Component {
 		return (
 			<div>
 				<Badge variant='dark' className='w-50 mr-2'>
-					SALDO BRUTO
+					{GROSS_BALANCE}
 				</Badge>
 				<span>{numberToReais(grossBalance)}</span>
 			</div>
@@ -301,7 +318,7 @@ class FixIncomeOperations extends React.Component {
 		return (
 			<div>
 				<Badge variant={variant} className='w-50 mr-2'>
-					RESULTADO
+					{RESULT}
 				</Badge>
 				<span>{numberToReais(result)}</span>
 			</div>
@@ -313,7 +330,7 @@ class FixIncomeOperations extends React.Component {
 		return (
 			<div>
 				<Badge variant={variant} className='w-50 mr-2'>
-					RENTABILIDADE
+					{PERCENTAGE_RESULT}
 				</Badge>
 				<span>{numberToPercentage(percentageResult)}</span>
 			</div>
@@ -391,8 +408,8 @@ class FixIncomeOperations extends React.Component {
 						<Col>
 							<Form.Control as='select' custom onChange={this.handleChangeType}>
 								<option />
-								<option>Aplicação</option>
-								<option>Resgate</option>
+								<option>{APPLICATION}</option>
+								<option>{RESCUE}</option>
 							</Form.Control>
 						</Col>
 					</Form.Row>

@@ -17,6 +17,13 @@ import {
 	onPostClasses,
 } from './ClassesController';
 
+import {
+	ADD_CLASS_SUCCESS,
+	ADD_CLASS_ERROR,
+	DELETE_CLASS_SUCCESS,
+	DELETE_CLASS_ERROR,
+} from '../constants';
+
 class Classes extends React.Component {
 	state = {
 		classes: [],
@@ -46,13 +53,13 @@ class Classes extends React.Component {
 				Number(this.state.percentage)
 			);
 			this.setState({
-				message: 'Classe de ativo incluída com sucesso!',
+				message: ADD_CLASS_SUCCESS,
 				variantMessage: 'success',
 				classes: await onGetClasses(),
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar incluir classe de ativo',
+				message: ADD_CLASS_ERROR,
 				variantMessage: 'danger',
 			});
 		}
@@ -62,13 +69,13 @@ class Classes extends React.Component {
 		try {
 			await onDeleteClasses(_id);
 			this.setState({
-				message: 'Classe de ativo excluída com sucesso!',
+				message: DELETE_CLASS_SUCCESS,
 				variantMessage: 'warning',
 				classes: await onGetClasses(),
 			});
 		} catch {
 			this.setState({
-				message: 'Erro ao tentar excluir classe de ativo',
+				message: DELETE_CLASS_ERROR,
 				variantMessage: 'danger',
 			});
 		}
