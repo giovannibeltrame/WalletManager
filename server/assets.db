@@ -1,0 +1,24 @@
+{"assetClass":"Renda Fixa","broker":"Clear","currency":"BRL","description":"Tesouro Selic 2025","ticker":"","_id":"14ak35nao7YgE29N"}
+{"assetClass":"Ações","broker":"Clear","currency":"BRL","description":"Ambev","ticker":"ABEV3","_id":"1J4Y9TRE7cWWzqeG","lastUnitPrice":14.16,"lastRefreshedDate":{"$$date":1595257421497},"lastAmount":10,"grossBalance":141.6,"totalApplied":113.69999999999999}
+{"assetClass":"FIIs","broker":"Clear","currency":"BRL","description":"Vinci Logística FII","ticker":"VILG11","_id":"BWX9U7cQguqLytbx","lastUnitPrice":120.97,"lastRefreshedDate":{"$$date":1595257493387},"lastAmount":8,"grossBalance":967.76,"totalApplied":991.6}
+{"assetClass":"Ações","broker":"Clear","currency":"BRL","description":"Itaúsa","ticker":"ITSA4","_id":"FssDObGs0Dw5CRmI","lastUnitPrice":10.27,"lastRefreshedDate":{"$$date":1595257489029},"lastAmount":110,"grossBalance":1129.7,"totalApplied":1284.73}
+{"assetClass":"FIIs","broker":"Clear","currency":"BRL","description":"Fator Veritá FII","ticker":"VRTA11","_id":"L90A81qkAyCV5h0V","lastUnitPrice":109.85,"lastRefreshedDate":{"$$date":1595257443811},"lastAmount":8,"grossBalance":878.8,"totalApplied":1069.68}
+{"assetClass":"Ações","broker":"Clear","currency":"BRL","description":"EDP Brasil","ticker":"ENBR3","_id":"LliHyrMk8TKdkHXQ","lastUnitPrice":18.08,"lastRefreshedDate":{"$$date":1595257441210},"lastAmount":32,"grossBalance":578.56,"totalApplied":683.8}
+{"assetClass":"Ações","broker":"Clear","currency":"BRL","description":"Wiz Soluções","ticker":"WIZS3","_id":"MG8H9L0dIHTzMwRM","lastUnitPrice":10.83,"lastRefreshedDate":{"$$date":1595257500928},"lastAmount":0,"grossBalance":0,"totalApplied":1086}
+{"assetClass":"Ouro","broker":"Avenue","currency":"USD","description":"iShares Gold Trust ETF","ticker":"IAU","_id":"MeafIgoJ3IJmyyLm","lastUnitPrice":17.29,"lastRefreshedDate":{"$$date":1595257505444},"lastAmount":0,"grossBalance":0,"totalApplied":0}
+{"assetClass":"Renda Fixa","broker":"Banco Inter","currency":"BRL","description":"LCI Banco Inter 101,5% CDI","ticker":"","_id":"WbQ1HVdvFEGdLe1a","grossBalance":426}
+{"assetClass":"USA","broker":"Avenue","currency":"USD","description":"Caixa USD","ticker":"","_id":"aEwgkhMP1REEaepE"}
+{"assetClass":"Renda Fixa","broker":"Rico","currency":"BRL","description":"Tesouro Pré 2023","ticker":"","_id":"gRZqSfp3NB7nA3be"}
+{"assetClass":"FIIs","broker":"Clear","currency":"BRL","description":"CSHG Renda Urbana FII","ticker":"HGRU11","_id":"nIbivAzXRPTAILKt","lastUnitPrice":130.5,"lastRefreshedDate":{"$$date":1595257430978},"lastAmount":9,"grossBalance":1174.5,"totalApplied":1168.59}
+{"assetClass":"FIIs","broker":"Clear","currency":"BRL","description":"HSI Mall FII","ticker":"HSML11","_id":"xMUJD0kdxxucE4no","lastUnitPrice":86.5,"lastRefreshedDate":{"$$date":1595257447071},"lastAmount":9,"grossBalance":778.5,"totalApplied":1111.95}
+{"assetClass":"Bitcoin","broker":"Biscoint","currency":"BRL","description":"Bitcoin","ticker":"","_id":"xaygftTxZyRVgB7o"}
+{"assetClass":"Renda Fixa","broker":"Rico","currency":"BRL","description":"Fundo Trend DI Simples","ticker":"","_id":"xjUcbN4PjM5yE62e"}
+{"assetClass":"Renda Fixa","broker":"Banco Inter","currency":"BRL","description":"LCI Banco Inter 101,5% CDI","ticker":"","_id":"WbQ1HVdvFEGdLe1a","grossBalance":424.54,"totalApplied":423.5}
+{"assetClass":"Renda Fixa","broker":"Banco Inter","currency":"BRL","description":"LCI Banco Inter 101,5% CDI","ticker":"","_id":"WbQ1HVdvFEGdLe1a","grossBalance":835.77,"totalApplied":833.96}
+{"assetClass":"Renda Fixa","broker":"Rico","currency":"BRL","description":"Fundo Trend DI Simples","ticker":"","_id":"xjUcbN4PjM5yE62e","grossBalance":4734.64,"totalApplied":4722.55}
+{"assetClass":"Renda Fixa","broker":"Rico","currency":"BRL","description":"Tesouro Pré 2023","ticker":"","_id":"gRZqSfp3NB7nA3be","grossBalance":497.84,"totalApplied":478.19}
+{"assetClass":"Renda Fixa","broker":"Clear","currency":"BRL","description":"Tesouro Selic 2025","ticker":"","_id":"14ak35nao7YgE29N","grossBalance":1171.09,"totalApplied":1782.98}
+{"assetClass":"Renda Fixa","broker":"Banco Inter","currency":"BRL","description":"LCI Banco Inter 101,5% CDI","ticker":"","_id":"WbQ1HVdvFEGdLe1a","grossBalance":835.77,"totalApplied":833.96,"lastRefreshedDate":{"$$date":1595272310215}}
+{"assetClass":"Renda Fixa","broker":"Clear","currency":"BRL","description":"Tesouro Selic 2025","ticker":"","_id":"14ak35nao7YgE29N","grossBalance":1171.09,"totalApplied":1782.98,"lastRefreshedDate":{"$$date":1595272328920}}
+{"assetClass":"Renda Fixa","broker":"Rico","currency":"BRL","description":"Tesouro Pré 2023","ticker":"","_id":"gRZqSfp3NB7nA3be","grossBalance":497.84,"totalApplied":478.19,"lastRefreshedDate":{"$$date":1595272340345}}
+{"assetClass":"Renda Fixa","broker":"Rico","currency":"BRL","description":"Fundo Trend DI Simples","ticker":"","_id":"xjUcbN4PjM5yE62e","grossBalance":4734.64,"totalApplied":4722.55,"lastRefreshedDate":{"$$date":1595272358362}}
