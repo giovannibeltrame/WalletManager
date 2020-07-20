@@ -3,18 +3,18 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import { Button, Container } from 'react-bootstrap';
 
-import { onGetAssets, onPutAssets } from './AssetsController';
+import { onGetAssets, onPutAssets } from '../Assets/AssetsController';
 import {
 	onGetLastPrice,
 	onGetLastPriceBitcoin,
 	onGetOperations,
-} from './Operations/OperationsController';
+} from '../Operations/OperationsController';
 import {
 	numberToDecimal,
 	numberToReais,
 	numberToDollars,
 	sumTotalAmount,
-} from './utils';
+} from '../utils';
 
 class Balance extends React.Component {
 	constructor(props) {

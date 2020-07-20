@@ -4,7 +4,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import { Button, Container, Form, Col } from 'react-bootstrap';
 import CurrencyInput from 'react-currency-input';
 
-import { numberToReais, numberToPercentage } from './utils';
+import { numberToReais, numberToPercentage } from '../utils';
 
 class TaxDivision extends React.Component {
 	constructor(props) {

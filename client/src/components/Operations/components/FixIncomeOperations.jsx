@@ -11,7 +11,7 @@ import {
 import CurrencyInput from 'react-currency-input';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-import { onPutAssets } from '../../AssetsController';
+import { onPutAssets } from '../../Assets/AssetsController';
 import {
 	onPostOperations,
 	onGetOperations,

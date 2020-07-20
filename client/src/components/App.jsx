@@ -3,11 +3,11 @@ import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Router, Route, NavLink } from 'react-router-dom';
 
-import Classes from './Classes';
-import Assets from './Assets';
+import Classes from './Classes/Classes';
+import Assets from './Assets/Assets';
 import Operations from './Operations/Operations';
-import TaxDivision from './TaxDivision';
-import Balance from './Balance';
+import TaxDivision from './TaxDivision/TaxDivision';
+import Balance from './Balance/Balance';
 import history from './history';
 
 const App = () => {

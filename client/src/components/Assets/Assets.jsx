@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Table, Button, Form, Col, Alert } from 'react-bootstrap';
 
 import { onGetAssets, onPostAssets, onDeleteAssets } from './AssetsController';
-import { onGetClasses } from './ClassesController';
-import history from './history';
+import { onGetClasses } from '../Classes/ClassesController';
+import history from '../history';
 
 class Assets extends React.Component {
 	state = {

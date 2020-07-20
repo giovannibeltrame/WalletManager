@@ -1,4 +1,4 @@
-import server from '../apis/server';
+import server from '../../apis/server';
 
 export const onDeleteAssets = async (_id) => {
 	await server.delete('/assets/' + _id);
