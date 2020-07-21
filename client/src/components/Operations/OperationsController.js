@@ -73,7 +73,7 @@ export const onGetLastPriceBitcoin = async () => {
 		'&function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=BRL'
 	);
 	const objectKey = 'Realtime Currency Exchange Rate';
-	const lastPrice = Number(response.data[objectKey]['6. Last Refreshed']);
+	const lastPrice = Number(response.data[objectKey]['5. Exchange Rate']);
 
 	console.log('last price btc/brl: ' + lastPrice);
 	return lastPrice;

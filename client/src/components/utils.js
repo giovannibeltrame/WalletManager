@@ -3,6 +3,13 @@ export const numberToDecimal = (number) => {
 	return number.toLocaleString('pt-BR');
 };
 
+export const numberToDecimal8Digits = (number) => {
+	if (!number) number = 0;
+	return number.toLocaleString('pt-BR', {
+		minimumFractionDigits: 8,
+	});
+};
+
 export const numberToReais = (number) => {
 	if (!number) number = 0;
 	return number.toLocaleString('pt-BR', {

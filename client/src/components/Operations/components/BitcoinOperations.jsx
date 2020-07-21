@@ -37,7 +37,7 @@ import {
 	JSCP,
 } from '../../constants';
 import {
-	numberToDecimal,
+	numberToDecimal8Digits,
 	numberToReais,
 	numberToPercentage,
 	sumTotalApplied,
@@ -231,7 +231,7 @@ class VariableIncomeOperations extends React.Component {
 				<Badge variant='secondary' className='w-50 mr-2'>
 					{TOTAL_AMOUNT}
 				</Badge>
-				<span>{numberToDecimal(totalAmount)}</span>
+				<span>{numberToDecimal8Digits(totalAmount)}</span>
 			</div>
 		);
 	};
@@ -320,7 +320,7 @@ class VariableIncomeOperations extends React.Component {
 				align: 'right',
 				text: 'Quantidade',
 				formatter: (cell, row, rowIndex, formatExtraData) =>
-					row.amount ? numberToDecimal(row.amount) : '-',
+					row.amount ? numberToDecimal8Digits(row.amount) : '-',
 			},
 			{
 				dataField: 'value',
@@ -451,6 +451,7 @@ class VariableIncomeOperations extends React.Component {
 								value={this.state.amount}
 								onChangeEvent={this.handleChangeAmount}
 								decimalSeparator=','
+								precision='8'
 								thousandSeparator='.'
 								disabled={
 									this.state.type === DIVIDEND || this.state.type === JSCP
