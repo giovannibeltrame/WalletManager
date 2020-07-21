@@ -14,14 +14,12 @@ var operationsDatastore = new nedb({
 	filename: 'operations.db',
 	autoload: true,
 });
-var pricesDatastore = new nedb({ filename: 'prices.db', autoload: true });
 
 // create rest api router and connect it to datastore
 var restApi = expressNedbRest();
 restApi.addDatastore('classes', classesDatastore);
 restApi.addDatastore('assets', assetsDatastore);
 restApi.addDatastore('operations', operationsDatastore);
-restApi.addDatastore('prices', pricesDatastore);
 
 // setup express server to serve rest service
 app.use('/', restApi);
