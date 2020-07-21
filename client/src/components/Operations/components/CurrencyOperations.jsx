@@ -23,41 +23,42 @@ import {
 	ADD_OPERATION_ERROR,
 	DELETE_OPERATION_SUCCESS,
 	DELETE_OPERATION_ERROR,
-	REFRESH_GROSS_BALANCE_SUCCESS,
-	REFRESH_GROSS_BALANCE_ERROR,
-	APPLICATION,
-	RESCUE,
+	REFRESH_LAST_AMOUNT_SUCCESS,
+	REFRESH_LAST_AMOUNT_ERROR,
 	TOTAL_APPLIED,
-	TOTAL_RESCUED,
+	TOTAL_APPLIED_DOLLARS,
+	TOTAL_APPLIED_NOW,
 	TOTAL_COSTS,
-	GROSS_BALANCE,
+	TOTAL_AMOUNT,
 	RESULT,
 	PERCENTAGE_RESULT,
+	AVERAGE_PRICE,
+	APPLICATION,
+	RESCUE,
 } from '../../constants';
 import {
-	numberToReais,
+	numberToDollars,
 	numberToPercentage,
-	sumTotalApplied,
-	sumTotalRescued,
+	numberToReais,
+	numberToReais4Digits,
 	sumAllCosts,
 } from '../../utils';
 
-class FixIncomeOperations extends React.Component {
+class CurrencyOperations extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			grossBalance: null,
 			operations: [],
+			brl: null,
 			brokerage: null,
 			costs: null,
 			date: '',
-			dueDate: '',
-			emoluments: null,
-			reason: '',
-			settlementFee: null,
+			lastAmount: null,
+			rate: null,
 			taxes: null,
 			type: '',
-			value: null,
+			usd: null,
 			message: '',
 			variantMessage: '',
 		};
@@ -74,7 +75,7 @@ class FixIncomeOperations extends React.Component {
 
 	handleSubmit = async (event) => {
 		event.preventDefault();
-		const { _id } = this.props.asset;
+		const _id = this.props.asset._id;
 		try {
 			await onPostOperations({ ...this.state, assetId: _id });
 			this.setState({
@@ -90,37 +91,38 @@ class FixIncomeOperations extends React.Component {
 		}
 	};
 
-	handleSubmitGrossBalance = async (event) => {
+	handleSubmitLastAmount = async (event) => {
 		event.preventDefault();
 		const { _id } = this.props.asset;
-		const { grossBalance } = this.state;
-		const lastRefreshedDate = new Date();
+		const { lastAmount } = this.state;
+
 		try {
 			await onPutAssets({
 				_id,
-				grossBalance,
-				lastRefreshedDate,
+				lastAmount,
 			});
 			this.setState({
-				message: REFRESH_GROSS_BALANCE_SUCCESS,
+				message: REFRESH_LAST_AMOUNT_SUCCESS,
 				variantMessage: 'success',
 			});
 		} catch {
 			this.setState({
-				message: REFRESH_GROSS_BALANCE_ERROR,
+				message: REFRESH_LAST_AMOUNT_ERROR,
 				variantMessage: 'danger',
 			});
 		}
 	};
 
+	handleChangeBRL = (event, maskedvalue, floatvalue) => {
+		this.setState({
+			brl: floatvalue,
+		});
+	};
+
 	handleChangeBrokerage = (event, maskedvalue, floatvalue) => {
 		this.setState({
 			brokerage: floatvalue,
-			costs:
-				floatvalue +
-				this.state.emoluments +
-				this.state.taxes +
-				this.state.settlementFee,
+			costs: floatvalue + this.state.taxes,
 		});
 	};
 
@@ -130,48 +132,22 @@ class FixIncomeOperations extends React.Component {
 		});
 	};
 
-	handleChangeDueDate = (event) => {
+	handleChangeLastAmount = (event, maskedvalue, floatvalue) => {
 		this.setState({
-			dueDate: event.target.value,
+			lastAmount: floatvalue,
 		});
 	};
 
-	handleChangeEmoluments = (event, maskedvalue, floatvalue) => {
+	handleChangeRate = (event, maskedvalue, floatvalue) => {
 		this.setState({
-			emoluments: floatvalue,
-			costs:
-				this.state.brokerage +
-				floatvalue +
-				this.state.taxes +
-				this.state.settlementFee,
-		});
-	};
-
-	handleChangeGrossBalance = (event, maskedvalue, floatvalue) => {
-		this.setState({
-			grossBalance: floatvalue,
-		});
-	};
-
-	handleChangeSettlementFee = (event, maskedvalue, floatvalue) => {
-		this.setState({
-			settlementFee: floatvalue,
-			costs:
-				this.state.brokerage +
-				this.state.emoluments +
-				this.state.taxes +
-				floatvalue,
+			rate: floatvalue,
 		});
 	};
 
 	handleChangeTaxes = (event, maskedvalue, floatvalue) => {
 		this.setState({
 			taxes: floatvalue,
-			costs:
-				this.state.brokerage +
-				this.state.emoluments +
-				floatvalue +
-				this.state.settlementFee,
+			costs: this.state.brokerage + floatvalue,
 		});
 	};
 
@@ -181,9 +157,9 @@ class FixIncomeOperations extends React.Component {
 		});
 	};
 
-	handleChangeValue = (event, maskedvalue, floatvalue) => {
+	handleChangeUSD = (event, maskedvalue, floatvalue) => {
 		this.setState({
-			value: floatvalue,
+			usd: floatvalue,
 		});
 	};
 
@@ -211,64 +187,6 @@ class FixIncomeOperations extends React.Component {
 		) : null;
 	};
 
-	getTableColumns() {
-		return [
-			{
-				dataField: 'date',
-				align: 'right',
-				text: 'Data',
-				formatter: (cell, row, rowIndex, formatExtraData) => {
-					const dateSplit = row.date.split('-');
-					return new Date(
-						dateSplit[0],
-						dateSplit[1] - 1,
-						dateSplit[2]
-					).toLocaleDateString('pt-BR');
-				},
-			},
-			{
-				dataField: 'value',
-				align: 'right',
-				text: 'Valor',
-				formatter: (cell, row, rowIndex, formatExtraData) =>
-					numberToReais(row.value),
-			},
-			{
-				dataField: 'type',
-				text: 'Tipo',
-			},
-			{
-				dataField: 'dueDte',
-				align: 'right',
-				text: 'Data de Vencimento',
-				formatter: (cell, row, rowIndex, formatExtraData) => {
-					if (!row.dueDate) return '-';
-					const dateSplit = row.dueDate.split('-');
-					return new Date(
-						dateSplit[0],
-						dateSplit[1] - 1,
-						dateSplit[2]
-					).toLocaleDateString('pt-BR');
-				},
-			},
-			{
-				dataField: 'actions',
-				align: 'center',
-				text: 'Excluir',
-				isDummyField: true,
-				formatter: (cell, row, rowIndex, formatExtraData) => (
-					<Button
-						variant='outline-danger'
-						size='sm'
-						onClick={() => this.handleDelete(row._id)}
-					>
-						Excluir
-					</Button>
-				),
-			},
-		];
-	}
-
 	renderTotalApplied = (totalApplied) => {
 		return (
 			<div>
@@ -280,13 +198,35 @@ class FixIncomeOperations extends React.Component {
 		);
 	};
 
-	renderTotalRescued = (totalRescued) => {
+	renderTotalAppliedDollars = (totalApplied) => {
 		return (
 			<div>
-				<Badge variant='warning' className='w-50 mr-2'>
-					{TOTAL_RESCUED}
+				<Badge variant='primary' className='w-50 mr-2'>
+					{TOTAL_APPLIED_DOLLARS}
 				</Badge>
-				<span>{numberToReais(totalRescued)}</span>
+				<span>{numberToDollars(totalApplied)}</span>
+			</div>
+		);
+	};
+
+	renderTotalAppliedNow = (totalAppliedNow) => {
+		return (
+			<div>
+				<Badge variant='dark' className='w-50 mr-2'>
+					{TOTAL_APPLIED_NOW}
+				</Badge>
+				<span>{numberToReais(totalAppliedNow)}</span>
+			</div>
+		);
+	};
+
+	renderTotalAmount = (totalAmount) => {
+		return (
+			<div>
+				<Badge variant='secondary' className='w-50 mr-2'>
+					{TOTAL_AMOUNT}
+				</Badge>
+				<span>{numberToDollars(totalAmount)}</span>
 			</div>
 		);
 	};
@@ -302,13 +242,13 @@ class FixIncomeOperations extends React.Component {
 		);
 	};
 
-	renderGrossBalance = (grossBalance) => {
+	renderAveragePrice = (averagePrice) => {
 		return (
 			<div>
-				<Badge variant='dark' className='w-50 mr-2'>
-					{GROSS_BALANCE}
+				<Badge variant='light' className='w-50 mr-2'>
+					{AVERAGE_PRICE}
 				</Badge>
-				<span>{numberToReais(grossBalance)}</span>
+				<span>{numberToReais(averagePrice)}</span>
 			</div>
 		);
 	};
@@ -337,23 +277,69 @@ class FixIncomeOperations extends React.Component {
 		);
 	};
 
+	getTableColumns() {
+		return [
+			{
+				dataField: 'date',
+				align: 'right',
+				text: 'Data',
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					const dateSplit = row.date.split('-');
+					return new Date(
+						dateSplit[0],
+						dateSplit[1] - 1,
+						dateSplit[2]
+					).toLocaleDateString('pt-BR');
+				},
+			},
+			{
+				dataField: 'brl',
+				align: 'right',
+				text: 'Reais',
+				formatter: (cell, row, rowIndex, formatExtraData) =>
+					numberToReais(row.brl),
+			},
+			{
+				dataField: 'usd',
+				align: 'right',
+				text: 'Dólares',
+				formatter: (cell, row, rowIndex, formatExtraData) =>
+					numberToDollars(row.usd),
+			},
+			{
+				dataField: 'rate',
+				align: 'right',
+				text: 'Valor câmbio',
+				formatter: (cell, row, rowIndex, formatExtraData) =>
+					numberToReais4Digits(row.rate),
+			},
+			{
+				dataField: 'type',
+				text: 'Tipo',
+			},
+			{
+				dataField: 'actions',
+				align: 'center',
+				text: 'Excluir',
+				isDummyField: true,
+				formatter: (cell, row, rowIndex, formatExtraData) => (
+					<Button
+						variant='outline-danger'
+						size='sm'
+						onClick={() => this.handleDelete(row._id)}
+					>
+						Excluir
+					</Button>
+				),
+			},
+		];
+	}
+
 	expandRow() {
 		return {
 			renderer: (row) => (
 				<Row>
 					<Col>
-						<div>
-							<small>
-								<b>Taxa de liquidação: </b>
-								{numberToReais(row.settlementFee)}
-							</small>
-						</div>
-						<div>
-							<small>
-								<b>Emolumentos: </b>
-								{numberToReais(row.emoluments)}
-							</small>
-						</div>
 						<div>
 							<small>
 								<b>Impostos: </b>
@@ -380,31 +366,73 @@ class FixIncomeOperations extends React.Component {
 
 	render() {
 		const { asset } = this.props;
-		const totalApplied = sumTotalApplied(this.state.operations);
-		const totalRescued = sumTotalRescued(this.state.operations);
+
+		const totalApplied = this.state.operations.reduce(
+			(accumulator, operation) => {
+				if (operation.type === 'Aplicação') return accumulator + operation.brl;
+				else return accumulator;
+			},
+			0
+		);
+
+		const totalDollars = this.state.operations.reduce(
+			(accumulator, operation) => {
+				if (operation.type === 'Aplicação') return accumulator + operation.usd;
+				else return accumulator;
+			},
+			0
+		);
+
+		const totalAppliedNow = totalDollars * asset.lastUnitPrice;
+
 		const totalCosts = sumAllCosts(this.state.operations);
-		const result =
-			asset.grossBalance - totalApplied + totalRescued - totalCosts;
+		const averagePrice = totalApplied / totalDollars;
+		const result = totalAppliedNow - totalApplied - totalCosts;
 		const percentageResult = result / totalApplied;
 
 		return (
 			<Container>
 				<h2 className='mt-5'>{asset.description}</h2>
+				<h5 className='text-secondary'>{numberToReais(asset.lastUnitPrice)}</h5>
 				<h6 className='text-secondary'>{asset.broker}</h6>
 				{this.renderMessage()}
 				<Form onSubmit={this.handleSubmit} className='w-75 my-4'>
-					<Form.Row className='w-50'>
+					<Form.Row>
 						<Col>
 							<CurrencyInput
 								className='form-control'
-								placeholder='Valor'
-								value={this.state.value}
-								onChangeEvent={this.handleChangeValue}
+								placeholder='Reais'
+								value={this.state.brl}
+								onChangeEvent={this.handleChangeBRL}
 								decimalSeparator=','
 								thousandSeparator='.'
 								prefix='R$ '
 							/>
 						</Col>
+						<Col>
+							<CurrencyInput
+								className='form-control'
+								placeholder='Dólares'
+								value={this.state.usd}
+								onChangeEvent={this.handleChangeUSD}
+								decimalSeparator=','
+								thousandSeparator='.'
+								prefix='US$ '
+							/>
+						</Col>
+						<Col>
+							<CurrencyInput
+								className='form-control'
+								placeholder='Valor câmbio'
+								value={this.state.rate}
+								onChangeEvent={this.handleChangeRate}
+								decimalSeparator=','
+								thousandSeparator='.'
+								precision='4'
+								prefix='R$ '
+							/>
+						</Col>
+
 						<Col>
 							<Form.Control as='select' custom onChange={this.handleChangeType}>
 								<option />
@@ -413,47 +441,7 @@ class FixIncomeOperations extends React.Component {
 							</Form.Control>
 						</Col>
 					</Form.Row>
-					<Form.Row className='w-75 mt-3'>
-						<Col>
-							<Form.Label>Data</Form.Label>
-							<Form.Control
-								placeholder='Data'
-								onChange={this.handleChangeDate}
-								type='date'
-							/>
-						</Col>
-						<Col>
-							<Form.Label>Data de Vencimento</Form.Label>
-							<Form.Control
-								placeholder='Data de Vencimento'
-								onChange={this.handleChangeDueDate}
-								type='date'
-							/>
-						</Col>
-					</Form.Row>
 					<Form.Row className='mt-3'>
-						<Col>
-							<CurrencyInput
-								className='form-control'
-								placeholder='Taxa de liquidação'
-								value={this.state.settlementFee}
-								onChangeEvent={this.handleChangeSettlementFee}
-								decimalSeparator=','
-								thousandSeparator='.'
-								prefix='R$ '
-							/>
-						</Col>
-						<Col>
-							<CurrencyInput
-								className='form-control'
-								placeholder='Emolumentos'
-								value={this.state.emoluments}
-								onChangeEvent={this.handleChangeEmoluments}
-								decimalSeparator=','
-								thousandSeparator='.'
-								prefix='R$ '
-							/>
-						</Col>
 						<Col>
 							<CurrencyInput
 								className='form-control'
@@ -487,9 +475,16 @@ class FixIncomeOperations extends React.Component {
 								disabled
 							/>
 						</Col>
+						<Col>
+							<Form.Control
+								placeholder='Data'
+								onChange={this.handleChangeDate}
+								type='date'
+							/>
+						</Col>
 					</Form.Row>
-					<Form.Row>
-						<Col className='mt-4'>
+					<Form.Row className='mt-3'>
+						<Col>
 							<Button variant='outline-primary' type='submit'>
 								Incluir operação
 							</Button>
@@ -507,15 +502,15 @@ class FixIncomeOperations extends React.Component {
 				/>
 
 				<Row className='my-4'>
-					<Form inline onSubmit={this.handleSubmitGrossBalance}>
+					<Form inline onSubmit={this.handleSubmitLastAmount}>
 						<CurrencyInput
 							className='form-control mx-3'
-							placeholder='Saldo bruto'
-							value={this.state.grossBalance}
-							onChangeEvent={this.handleChangeGrossBalance}
+							placeholder='Saldo atual'
+							value={this.state.lastAmount}
+							onChangeEvent={this.handleChangeLastAmount}
 							decimalSeparator=','
 							thousandSeparator='.'
-							prefix='R$ '
+							prefix='US$ '
 						/>
 						<Button variant='outline-success' type='submit'>
 							Atualizar
@@ -526,13 +521,15 @@ class FixIncomeOperations extends React.Component {
 				<Row>
 					<Col>
 						{this.renderTotalApplied(totalApplied)}
-						{this.renderTotalRescued(totalRescued)}
+						{this.renderTotalAppliedDollars(totalDollars)}
+						{this.renderTotalAppliedNow(totalAppliedNow)}
 						{this.renderTotalCosts(totalCosts)}
 					</Col>
 					<Col>
-						{this.renderGrossBalance(asset.grossBalance)}
+						{this.renderTotalAmount(asset.lastAmount)}
 						{this.renderResult(result)}
 						{this.renderPercentageResult(percentageResult)}
+						{this.renderAveragePrice(averagePrice)}
 					</Col>
 				</Row>
 			</Container>
@@ -540,4 +537,4 @@ class FixIncomeOperations extends React.Component {
 	}
 }
 
-export default FixIncomeOperations;
+export default CurrencyOperations;

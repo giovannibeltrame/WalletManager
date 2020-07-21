@@ -15,31 +15,37 @@ export const onGetOperations = async (assetId) => {
 export const onPostOperations = async ({
 	assetId,
 	amount,
+	brl,
 	brokerage,
 	costs,
 	date,
 	dueDate,
 	emoluments,
-	iof,
+	rate,
 	reason,
 	settlementFee,
+	taxes,
 	type,
 	unitPrice,
+	usd,
 	value,
 }) => {
 	const response = await server.post('/operations', {
 		assetId,
 		amount,
+		brl,
 		brokerage,
 		costs,
 		date,
 		dueDate,
 		emoluments,
-		iof,
+		rate,
 		reason,
 		settlementFee,
+		taxes,
 		type,
 		unitPrice,
+		usd,
 		value,
 	});
 	return response.data;
@@ -67,8 +73,19 @@ export const onGetLastPriceBitcoin = async () => {
 		'&function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=BRL'
 	);
 	const objectKey = 'Realtime Currency Exchange Rate';
-	const lastPrice = response.data[objectKey]['6. Last Refreshed'];
+	const lastPrice = Number(response.data[objectKey]['6. Last Refreshed']);
 
 	console.log('last price btc/brl: ' + lastPrice);
+	return lastPrice;
+};
+
+export const onGetLastPriceDollar = async () => {
+	const response = await alphavantage.get(
+		'&function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=BRL'
+	);
+	const objectKey = 'Realtime Currency Exchange Rate';
+	const lastPrice = Number(response.data[objectKey]['5. Exchange Rate']);
+
+	console.log('last price usd/brl: ' + lastPrice);
 	return lastPrice;
 };

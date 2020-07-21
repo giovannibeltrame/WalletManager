@@ -12,6 +12,15 @@ export const numberToReais = (number) => {
 	});
 };
 
+export const numberToReais4Digits = (number) => {
+	if (!number) number = 0;
+	return number.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+		minimumFractionDigits: 4,
+	});
+};
+
 export const numberToDollars = (number) => {
 	if (!number) number = 0;
 	return number.toLocaleString('pt-BR', {

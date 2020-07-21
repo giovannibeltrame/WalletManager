@@ -17,6 +17,9 @@ export const REFRESH_GROSS_BALANCE_SUCCESS =
 	'Saldo bruto atualizado com sucesso!';
 export const REFRESH_GROSS_BALANCE_ERROR =
 	'Erro ao tentar atualizar saldo bruto';
+export const REFRESH_LAST_AMOUNT_SUCCESS =
+	'Saldo atual atualizado com sucesso!';
+export const REFRESH_LAST_AMOUNT_ERROR = 'Erro ao tentar atualizar saldo atual';
 
 export const BROKER_AVENUE = 'Avenue';
 export const BROKER_BANCO_INTER = 'Banco Inter';
@@ -35,6 +38,8 @@ export const RENDA_FIXA = 'Renda Fixa';
 export const USA = 'USA';
 
 export const TOTAL_APPLIED = 'VALOR APLICADO';
+export const TOTAL_APPLIED_DOLLARS = 'TOTAL COMPRADO EM DÓLARES';
+export const TOTAL_APPLIED_NOW = 'VALOR APLICADO COTAÇÃO ATUAL';
 export const TOTAL_RESCUED = 'VALOR RESGATADO';
 export const TOTAL_YIELD = 'RECEBIDO EM PROVENTOS';
 export const TOTAL_COSTS = 'TOTAL EM CUSTOS';

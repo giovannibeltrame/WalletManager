@@ -5,12 +5,20 @@ import { Button, Container } from 'react-bootstrap';
 
 import { onGetAssets, onPutAssets } from '../Assets/AssetsController';
 import {
+	onGetOperations,
 	onGetLastPrice,
 	onGetLastPriceBitcoin,
-	onGetOperations,
+	onGetLastPriceDollar,
 } from '../Operations/OperationsController';
 
-import { ACAO, BITCOIN, FUNDO_IMOBILIARIO } from '../constants';
+import {
+	ACAO,
+	BITCOIN,
+	FUNDO_IMOBILIARIO,
+	OURO,
+	PRATA,
+	USA,
+} from '../constants';
 import {
 	numberToDecimal,
 	numberToReais,
@@ -24,13 +32,14 @@ class Balance extends React.Component {
 
 		this.state = {
 			assets: [],
+			lastPriceDollar: null,
 		};
 	}
 
 	refreshAssets = async () => {
 		const assets = await onGetAssets();
 		this.setState({
-			assets: assets.filter((item) => item.grossBalance),
+			assets: assets.filter((item) => item),
 		});
 	};
 
@@ -39,28 +48,51 @@ class Balance extends React.Component {
 	}
 
 	handleCallService = async (asset) => {
-		let lastUnitPrice;
-		const { _id, assetClass, ticker } = asset;
+		let lastUnitPrice,
+			lastPriceDollar = 1;
+		const { _id, assetClass, description, lastAmount, ticker } = asset;
+		const lastRefreshedDate = new Date();
 		try {
-			if (assetClass === BITCOIN) lastUnitPrice = await onGetLastPriceBitcoin();
-			const tickerService =
-				assetClass === ACAO || assetClass === FUNDO_IMOBILIARIO
-					? ticker + '.SA'
-					: ticker;
-			lastUnitPrice = await onGetLastPrice(tickerService);
+			if (description !== 'Caixa USD') {
+				switch (assetClass) {
+					case BITCOIN:
+						lastUnitPrice = await onGetLastPriceBitcoin();
+						break;
+					case ACAO:
+					case FUNDO_IMOBILIARIO:
+						lastUnitPrice = await onGetLastPrice(ticker + '.SA');
+						break;
+					case USA:
+					case OURO:
+					case PRATA:
+						lastUnitPrice = await onGetLastPrice(ticker);
+						lastPriceDollar = await onGetLastPriceDollar();
+						break;
+					default:
+				}
 
-			const assetOperations = await onGetOperations(_id);
-			const lastAmount = sumTotalAmount(assetOperations);
-			const grossBalance = lastAmount * lastUnitPrice;
+				const assetOperations = await onGetOperations(_id);
+				const lastAmount = sumTotalAmount(assetOperations);
+				const grossBalance = lastAmount * lastUnitPrice * lastPriceDollar;
 
-			const lastRefreshedDate = new Date();
-			await onPutAssets({
-				_id,
-				lastUnitPrice,
-				lastAmount,
-				grossBalance,
-				lastRefreshedDate,
-			});
+				await onPutAssets({
+					_id,
+					lastUnitPrice,
+					lastAmount,
+					grossBalance,
+					lastRefreshedDate,
+				});
+			} else {
+				lastUnitPrice = await onGetLastPriceDollar();
+				const grossBalance = lastAmount * lastUnitPrice;
+
+				await onPutAssets({
+					_id,
+					lastUnitPrice,
+					grossBalance,
+					lastRefreshedDate,
+				});
+			}
 			this.refreshAssets();
 		} catch (error) {
 			console.error(error);
@@ -85,7 +117,7 @@ class Balance extends React.Component {
 				editable: false,
 				formatter: (cell, row, rowIndex, formatExtraData) => {
 					if (!row.lastUnitPrice) return '-';
-					return row.currency === 'USD'
+					return row.currency === 'USD' && row.description !== 'Caixa USD'
 						? numberToDollars(row.lastUnitPrice)
 						: numberToReais(row.lastUnitPrice);
 				},
@@ -106,10 +138,18 @@ class Balance extends React.Component {
 				align: 'right',
 				footerAlign: 'right',
 				editable: false,
-				formatter: (cell, row, rowIndex, formatExtraData) =>
-					numberToReais(row.grossBalance),
-				footer: (columnData) =>
-					numberToReais(columnData.reduce((acc, row) => acc + row, 0)),
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					if (!row.grossBalance) return '-';
+					return numberToReais(row.grossBalance);
+				},
+				footer: (columnData) => {
+					return numberToReais(
+						columnData.reduce((acc, row) => {
+							if (!row) return acc;
+							return acc + row;
+						}, 0)
+					);
+				},
 			},
 			{
 				dataField: 'lastRefreshedDate',

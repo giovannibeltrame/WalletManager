@@ -330,18 +330,18 @@ class VariableIncomeOperations extends React.Component {
 					row.unitPrice ? numberToReais(row.unitPrice) : '-',
 			},
 			{
-				dataField: 'value',
-				align: 'right',
-				text: 'Valor total',
-				formatter: (cell, row, rowIndex, formatExtraData) =>
-					numberToReais(row.value),
-			},
-			{
 				dataField: 'amount',
 				align: 'right',
 				text: 'Quantidade',
 				formatter: (cell, row, rowIndex, formatExtraData) =>
 					row.amount ? numberToDecimal(row.amount) : '-',
+			},
+			{
+				dataField: 'value',
+				align: 'right',
+				text: 'Valor total',
+				formatter: (cell, row, rowIndex, formatExtraData) =>
+					numberToReais(row.value),
 			},
 			{
 				dataField: 'type',

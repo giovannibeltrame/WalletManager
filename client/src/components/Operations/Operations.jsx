@@ -1,6 +1,7 @@
 import React from 'react';
 
 import FixIncomeOperations from './components/FixIncomeOperations';
+import InternationalOperations from './components/InternationalOperations';
 import VariableIncomeOperations from './components/VariableIncomeOperations';
 
 import {
@@ -18,7 +19,6 @@ class Operations extends React.Component {
 	render() {
 		const { state: asset } = this.props.location;
 
-		debugger;
 		switch (asset.assetClass) {
 			case ACAO:
 			case FUNDO_IMOBILIARIO:
@@ -30,7 +30,7 @@ class Operations extends React.Component {
 			case USA:
 			case OURO:
 			case PRATA:
-				return '';
+				return <InternationalOperations asset={asset} />;
 			default:
 				return;
 		}
