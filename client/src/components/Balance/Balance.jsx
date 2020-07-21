@@ -1,7 +1,8 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
+import { ResponsivePie } from '@nivo/pie';
 
 import { onGetAssets, onPutAssets } from '../Assets/AssetsController';
 import {
@@ -23,7 +24,9 @@ import {
 	numberToDecimal,
 	numberToReais,
 	numberToDollars,
+	numberToPercentage,
 	sumTotalAmount,
+	groupBy,
 } from '../utils';
 
 class Balance extends React.Component {
@@ -32,7 +35,6 @@ class Balance extends React.Component {
 
 		this.state = {
 			assets: [],
-			lastPriceDollar: null,
 		};
 	}
 
@@ -46,6 +48,33 @@ class Balance extends React.Component {
 	async componentDidMount() {
 		this.refreshAssets();
 	}
+
+	mapClassesToData = () => {
+		let response = [];
+		const totalGrossBalance = this.state.assets.reduce(
+			(acc, asset) => acc + asset.grossBalance,
+			0
+		);
+		const assetClassMap = groupBy(
+			this.state.assets,
+			(asset) => asset.assetClass
+		);
+
+		assetClassMap.forEach((value, key) => {
+			const assetClassGrossBalance = value.reduce(
+				(acc, asset) => acc + asset.grossBalance,
+				0
+			);
+			response.push({
+				id: key,
+				value: assetClassGrossBalance / totalGrossBalance,
+				assetClassGrossBalance: assetClassGrossBalance,
+				label: key,
+			});
+		});
+
+		return response;
+	};
 
 	handleCallService = async (asset) => {
 		let lastUnitPrice,
@@ -185,15 +214,72 @@ class Balance extends React.Component {
 				footer: '',
 			},
 		];
+
+		const percentageColumns = [
+			{
+				dataField: 'label',
+				text: 'Classe de ativo',
+				footer: 'TOTAL',
+			},
+			{
+				dataField: 'value',
+				text: '%',
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					return numberToPercentage(row.value);
+				},
+				footer: (columnData) => {
+					return numberToPercentage(
+						columnData.reduce((acc, row) => acc + row, 0)
+					);
+				},
+			},
+			{
+				dataField: 'assetClassGrossBalance',
+				text: 'Saldo bruto',
+
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					return numberToReais(row.assetClassGrossBalance);
+				},
+				footer: (columnData) => {
+					return numberToReais(columnData.reduce((acc, row) => acc + row, 0));
+				},
+			},
+		];
 		return (
 			<Container>
-				<BootstrapTable
-					hover
-					keyField='_id'
-					data={this.state.assets}
-					columns={columns}
-					cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
-				/>
+				<Row>
+					<BootstrapTable
+						hover
+						keyField='_id'
+						data={this.state.assets}
+						columns={columns}
+						cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
+					/>
+				</Row>
+				<Row style={{ height: 500 }}>
+					<Col>
+						<ResponsivePie
+							colors={{ scheme: 'accent' }}
+							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							data={this.mapClassesToData()}
+							innerRadius={0.3}
+							padAngle={1}
+							radialLabel={'label'}
+							radialLabelsLinkStrokeWidth={1}
+							// enableRadialLabels={false}
+							enableSlicesLabels={false}
+							tooltipFormat={(value) => numberToPercentage(value)}
+						/>
+					</Col>
+					<Col>
+						<BootstrapTable
+							hover
+							keyField='id'
+							data={this.mapClassesToData()}
+							columns={percentageColumns}
+						/>
+					</Col>
+				</Row>
 			</Container>
 		);
 	}
