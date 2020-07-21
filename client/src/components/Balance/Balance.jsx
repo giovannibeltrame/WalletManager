@@ -52,6 +52,7 @@ class Balance extends React.Component {
 			lastPriceDollar = 1;
 		const { _id, assetClass, description, lastAmount, ticker } = asset;
 		const lastRefreshedDate = new Date();
+
 		try {
 			if (description !== 'Caixa USD') {
 				switch (assetClass) {
@@ -69,6 +70,7 @@ class Balance extends React.Component {
 						lastPriceDollar = await onGetLastPriceDollar();
 						break;
 					default:
+						return;
 				}
 
 				const assetOperations = await onGetOperations(_id);

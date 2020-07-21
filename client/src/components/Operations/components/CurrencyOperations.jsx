@@ -248,7 +248,7 @@ class CurrencyOperations extends React.Component {
 				<Badge variant='light' className='w-50 mr-2'>
 					{AVERAGE_PRICE}
 				</Badge>
-				<span>{numberToReais(averagePrice)}</span>
+				<span>{numberToReais4Digits(averagePrice)}</span>
 			</div>
 		);
 	};
