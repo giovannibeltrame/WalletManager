@@ -1,5 +1,6 @@
 import React from 'react';
 
+import BitcoinOperations from './components/BitcoinOperations';
 import FixIncomeOperations from './components/FixIncomeOperations';
 import InternationalOperations from './components/InternationalOperations';
 import VariableIncomeOperations from './components/VariableIncomeOperations';
@@ -22,8 +23,9 @@ class Operations extends React.Component {
 		switch (asset.assetClass) {
 			case ACAO:
 			case FUNDO_IMOBILIARIO:
-			case BITCOIN:
 				return <VariableIncomeOperations asset={asset} />;
+			case BITCOIN:
+				return <BitcoinOperations asset={asset} />;
 			case RENDA_FIXA:
 			case PREVIDENCIA_PRIVADA:
 				return <FixIncomeOperations asset={asset} />;
