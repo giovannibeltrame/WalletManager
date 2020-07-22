@@ -10,6 +10,9 @@ import {
 	Col,
 } from 'react-bootstrap';
 import { ResponsivePie } from '@nivo/pie';
+import BootstrapTable from 'react-bootstrap-table-next';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+import CurrencyInput from 'react-currency-input';
 
 import {
 	onDeleteClasses,
@@ -23,10 +26,12 @@ import {
 	DELETE_CLASS_SUCCESS,
 	DELETE_CLASS_ERROR,
 } from '../constants';
+import { numberToReais, numberToPercentage } from '../utils';
 
 class Classes extends React.Component {
 	state = {
 		classes: [],
+		simulateData: [],
 		description: '',
 		percentage: null,
 		message: '',
@@ -144,7 +149,79 @@ class Classes extends React.Component {
 		);
 	};
 
+	simulate = () => {
+		if (this.state.simulateData.length === 0) {
+			const { state: classesGrossBalanceData } = this.props.location;
+			this.setState({
+				simulateData: JSON.parse(JSON.stringify(classesGrossBalanceData)),
+			});
+			return;
+		}
+
+		const totalGrossBalance = this.state.simulateData.reduce(
+			(acc, asset) => acc + Number(asset.assetClassGrossBalance),
+			0
+		);
+
+		const simulateData = this.state.simulateData.map((item) => {
+			item.assetClassGrossBalance = Number(item.assetClassGrossBalance);
+			item.value = item.assetClassGrossBalance / totalGrossBalance;
+			return item;
+		});
+
+		this.setState({ simulateData });
+	};
+
 	render() {
+		const { state: classesGrossBalanceData } = this.props.location;
+
+		const percentageColumns = [
+			{
+				dataField: 'label',
+				text: 'Classe de ativo',
+				footer: 'TOTAL',
+				sort: true,
+				editable: false,
+			},
+			{
+				dataField: 'value',
+				text: '%',
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					return numberToPercentage(row.value);
+				},
+				footer: (columnData) => {
+					return numberToPercentage(
+						columnData.reduce((acc, row) => acc + row, 0)
+					);
+				},
+				sort: true,
+				editable: false,
+			},
+			{
+				dataField: 'assetClassGrossBalance',
+				text: 'Saldo bruto',
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					return numberToReais(row.assetClassGrossBalance);
+				},
+				footer: (columnData) => {
+					return numberToReais(columnData.reduce((acc, row) => acc + row, 0));
+				},
+				sort: true,
+				editorRenderer: (editorProps, value, row, rowIndex, columnIndex) => (
+					<CurrencyInput
+						className='form-control'
+						value={row.assetClassGrossBalance}
+						onChangeEvent={(event, maskedvalue, floatvalue) => {
+							row.assetClassGrossBalance = floatvalue;
+						}}
+						decimalSeparator=','
+						thousandSeparator='.'
+						prefix='R$ '
+					/>
+				),
+			},
+		];
+
 		return (
 			<Container>
 				<h2 className='my-5'>Carteira planejada</h2>
@@ -185,9 +262,62 @@ class Classes extends React.Component {
 							padAngle={1}
 							radialLabel={'label'}
 							radialLabelsLinkStrokeWidth={1}
-							// enableRadialLabels={false}
 							enableSlicesLabels={false}
 							tooltipFormat={(value) => value + '%'}
+						/>
+					</Col>
+				</Row>
+
+				<Row className='mt-5' style={{ height: 500 }}>
+					<Col>
+						<BootstrapTable
+							hover
+							keyField='id'
+							data={classesGrossBalanceData}
+							columns={percentageColumns}
+							defaultSorted={[{ dataField: 'label', order: 'asc' }]}
+						/>
+					</Col>
+					<Col>
+						<ResponsivePie
+							colors={{ scheme: 'accent' }}
+							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							data={classesGrossBalanceData}
+							innerRadius={0.3}
+							padAngle={1}
+							radialLabel={'label'}
+							radialLabelsLinkStrokeWidth={1}
+							enableSlicesLabels={false}
+							tooltipFormat={(value) => numberToPercentage(value)}
+						/>
+					</Col>
+				</Row>
+
+				<Row className='mt-5' style={{ height: 500 }}>
+					<Col>
+						<BootstrapTable
+							hover
+							keyField='id'
+							data={this.state.simulateData}
+							columns={percentageColumns}
+							defaultSorted={[{ dataField: 'label', order: 'asc' }]}
+							cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
+						/>
+						<Button variant='outline-primary' onClick={() => this.simulate()}>
+							Simular
+						</Button>
+					</Col>
+					<Col>
+						<ResponsivePie
+							colors={{ scheme: 'accent' }}
+							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							data={this.state.simulateData}
+							innerRadius={0.3}
+							padAngle={1}
+							radialLabel={'label'}
+							radialLabelsLinkStrokeWidth={1}
+							enableSlicesLabels={false}
+							tooltipFormat={(value) => numberToPercentage(value)}
 						/>
 					</Col>
 				</Row>

@@ -4,6 +4,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { ResponsivePie } from '@nivo/pie';
 
+import history from '../history';
 import { onGetAssets, onPutAssets } from '../Assets/AssetsController';
 import {
 	onGetOperations,
@@ -22,9 +23,9 @@ import {
 } from '../constants';
 import {
 	numberToDecimal,
+	numberToPercentage,
 	numberToReais,
 	numberToDollars,
-	numberToPercentage,
 	sumTotalAmount,
 	groupBy,
 } from '../utils';
@@ -48,6 +49,21 @@ class Balance extends React.Component {
 	async componentDidMount() {
 		this.refreshAssets();
 	}
+
+	mapAssetsToData = () => {
+		const totalGrossBalance = this.state.assets.reduce(
+			(acc, asset) => acc + asset.grossBalance,
+			0
+		);
+
+		const response = this.state.assets.map((asset) => ({
+			id: asset._id,
+			value: asset.grossBalance / totalGrossBalance,
+			label: asset.description,
+		}));
+
+		return response;
+	};
 
 	mapClassesToData = () => {
 		let response = [];
@@ -218,8 +234,9 @@ class Balance extends React.Component {
 		const percentageColumns = [
 			{
 				dataField: 'label',
-				text: 'Classe de ativo',
+				text: 'Ativo',
 				footer: 'TOTAL',
+				sort: true,
 			},
 			{
 				dataField: 'value',
@@ -232,21 +249,18 @@ class Balance extends React.Component {
 						columnData.reduce((acc, row) => acc + row, 0)
 					);
 				},
-			},
-			{
-				dataField: 'assetClassGrossBalance',
-				text: 'Saldo bruto',
-
-				formatter: (cell, row, rowIndex, formatExtraData) => {
-					return numberToReais(row.assetClassGrossBalance);
-				},
-				footer: (columnData) => {
-					return numberToReais(columnData.reduce((acc, row) => acc + row, 0));
-				},
+				sort: true,
 			},
 		];
+
 		return (
 			<Container>
+				<Button
+					variant='outline-primary'
+					onClick={() => history.push('/classes', this.mapClassesToData())}
+				>
+					Go to Classes
+				</Button>
 				<Row>
 					<BootstrapTable
 						hover
@@ -256,27 +270,28 @@ class Balance extends React.Component {
 						cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
 					/>
 				</Row>
-				<Row style={{ height: 500 }}>
-					<Col>
-						<ResponsivePie
-							colors={{ scheme: 'accent' }}
-							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
-							data={this.mapClassesToData()}
-							innerRadius={0.3}
-							padAngle={1}
-							radialLabel={'label'}
-							radialLabelsLinkStrokeWidth={1}
-							// enableRadialLabels={false}
-							enableSlicesLabels={false}
-							tooltipFormat={(value) => numberToPercentage(value)}
-						/>
-					</Col>
+
+				<Row className='mt-5' style={{ height: 500 }}>
 					<Col>
 						<BootstrapTable
 							hover
 							keyField='id'
-							data={this.mapClassesToData()}
+							data={this.mapAssetsToData()}
 							columns={percentageColumns}
+							defaultSorted={[{ dataField: 'label', order: 'asc' }]}
+						/>
+					</Col>
+					<Col>
+						<ResponsivePie
+							colors={{ scheme: 'accent' }}
+							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							data={this.mapAssetsToData()}
+							innerRadius={0.3}
+							padAngle={1}
+							radialLabel={'label'}
+							radialLabelsLinkStrokeWidth={1}
+							enableSlicesLabels={false}
+							tooltipFormat={(value) => numberToPercentage(value)}
 						/>
 					</Col>
 				</Row>

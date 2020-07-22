@@ -19,9 +19,6 @@ const App = () => {
 						WalletManager
 					</Navbar.Brand>
 					<Nav>
-						<Nav.Link as={NavLink} to='/classes'>
-							Classes
-						</Nav.Link>
 						<Nav.Link as={NavLink} to='/assets'>
 							Assets
 						</Nav.Link>
