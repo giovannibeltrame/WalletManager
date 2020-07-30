@@ -39,7 +39,7 @@ import {
 	SOLD_SUBSCRIPTION,
 } from '../../constants';
 import {
-	numberToDecimal,
+	numberToDecimal8Digits,
 	numberToDollars,
 	numberToPercentage,
 	sumTotalApplied,
@@ -245,7 +245,7 @@ class InternationalOperations extends React.Component {
 				<Badge variant='secondary' className='w-50 mr-2'>
 					{TOTAL_AMOUNT}
 				</Badge>
-				<span>{numberToDecimal(totalAmount)}</span>
+				<span>{numberToDecimal8Digits(totalAmount)}</span>
 			</div>
 		);
 	};
@@ -334,7 +334,7 @@ class InternationalOperations extends React.Component {
 				align: 'right',
 				text: 'Quantidade',
 				formatter: (cell, row, rowIndex, formatExtraData) =>
-					row.amount ? numberToDecimal(row.amount) : '-',
+					row.amount ? numberToDecimal8Digits(row.amount) : '-',
 			},
 			{
 				dataField: 'value',
@@ -475,6 +475,7 @@ class InternationalOperations extends React.Component {
 								onChangeEvent={this.handleChangeAmount}
 								decimalSeparator=','
 								thousandSeparator='.'
+								precision='4'
 								disabled={
 									this.state.type === DIVIDEND || this.state.type === JSCP
 										? 'disabled'

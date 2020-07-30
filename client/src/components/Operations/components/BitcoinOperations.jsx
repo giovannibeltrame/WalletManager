@@ -451,8 +451,8 @@ class VariableIncomeOperations extends React.Component {
 								value={this.state.amount}
 								onChangeEvent={this.handleChangeAmount}
 								decimalSeparator=','
-								precision='8'
 								thousandSeparator='.'
+								precision='8'
 								disabled={
 									this.state.type === DIVIDEND || this.state.type === JSCP
 										? 'disabled'
