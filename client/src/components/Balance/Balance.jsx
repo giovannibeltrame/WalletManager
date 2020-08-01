@@ -42,7 +42,7 @@ class Balance extends React.Component {
 	refreshAssets = async () => {
 		const assets = await onGetAssets();
 		this.setState({
-			assets: assets.filter((item) => item),
+			assets: assets.filter((item) => item.grossBalance),
 		});
 	};
 
@@ -60,6 +60,7 @@ class Balance extends React.Component {
 			id: asset._id,
 			value: asset.grossBalance / totalGrossBalance,
 			label: asset.description,
+			assetClass: asset.assetClass,
 		}));
 
 		return response;
@@ -249,6 +250,12 @@ class Balance extends React.Component {
 						columnData.reduce((acc, row) => acc + row, 0)
 					);
 				},
+				sort: true,
+			},
+			{
+				dataField: 'assetClass',
+				text: 'Classe de ativo',
+				footer: '',
 				sort: true,
 			},
 		];
