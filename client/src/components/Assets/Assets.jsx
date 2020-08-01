@@ -67,15 +67,17 @@ class Assets extends React.Component {
 	};
 
 	handleSubmit = async (event) => {
+		const { assetClass, broker, currency, description, ticker } = this.state;
 		event.preventDefault();
 		try {
-			await onPostAssets(
-				this.state.assetClass,
-				this.state.broker,
-				this.state.currency,
-				this.state.description,
-				this.state.ticker
-			);
+			await onPostAssets({
+				assetClass,
+				broker,
+				currency,
+				description,
+				ticker,
+				grossBalance: 0,
+			});
 			this.setState({
 				message: ADD_ASSET_SUCCESS,
 				variantMessage: 'success',

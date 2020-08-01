@@ -16,20 +16,8 @@ export const onGetAsset = async (description) => {
 	return response.data[0];
 };
 
-export const onPostAssets = async (
-	assetClass,
-	broker,
-	currency,
-	description,
-	ticker
-) => {
-	const response = await server.post('/assets', {
-		assetClass,
-		broker,
-		currency,
-		description,
-		ticker,
-	});
+export const onPostAssets = async (asset) => {
+	const response = await server.post('/assets', { ...asset });
 	return response.data;
 };
 
