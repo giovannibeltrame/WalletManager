@@ -85,7 +85,7 @@ class Balance extends React.Component {
 			response.push({
 				id: key,
 				value: assetClassGrossBalance / totalGrossBalance,
-				assetClassGrossBalance: assetClassGrossBalance,
+				assetClassGrossBalance,
 				label: key,
 			});
 		});
