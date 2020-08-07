@@ -279,22 +279,6 @@ class Classes extends React.Component {
 						/>
 					</Col>
 					<Col>
-						<ResponsivePie
-							colors={{ scheme: 'accent' }}
-							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
-							data={classesGrossBalanceData}
-							innerRadius={0.3}
-							padAngle={1}
-							radialLabel={'label'}
-							radialLabelsLinkStrokeWidth={1}
-							enableSlicesLabels={false}
-							tooltipFormat={(value) => numberToPercentage(value)}
-						/>
-					</Col>
-				</Row>
-
-				<Row className='mt-5' style={{ height: 500 }}>
-					<Col>
 						<BootstrapTable
 							hover
 							keyField='id'
@@ -306,6 +290,22 @@ class Classes extends React.Component {
 						<Button variant='outline-primary' onClick={() => this.simulate()}>
 							Simular
 						</Button>
+					</Col>
+				</Row>
+
+				<Row className='mt-5' style={{ height: 500 }}>
+					<Col>
+						<ResponsivePie
+							colors={{ scheme: 'accent' }}
+							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							data={classesGrossBalanceData}
+							innerRadius={0.3}
+							padAngle={1}
+							radialLabel={'label'}
+							radialLabelsLinkStrokeWidth={1}
+							enableSlicesLabels={false}
+							tooltipFormat={(value) => numberToPercentage(value)}
+						/>
 					</Col>
 					<Col>
 						<ResponsivePie
