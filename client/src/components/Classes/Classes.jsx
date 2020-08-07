@@ -268,7 +268,7 @@ class Classes extends React.Component {
 					</Col>
 				</Row>
 
-				<Row className='mt-5' style={{ height: 500 }}>
+				<Row className='mt-5'>
 					<Col>
 						<BootstrapTable
 							hover
