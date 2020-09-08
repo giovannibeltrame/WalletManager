@@ -42,7 +42,7 @@ class Balance extends React.Component {
 	refreshAssets = async () => {
 		const assets = await onGetAssets();
 		this.setState({
-			assets: assets.filter((item) => item.grossBalance),
+			assets: assets.filter((item) => item),
 		});
 	};
 
@@ -207,8 +207,9 @@ class Balance extends React.Component {
 				formatter: (cell, row, rowIndex, formatExtraData) =>
 					row.lastRefreshedDate
 						? new Date(row.lastRefreshedDate).toLocaleDateString('pt-BR', {
-								dateStyle: 'short',
-								timeStyle: 'short',
+								hour: '2-digit',
+								minute: '2-digit',
+								second: '2-digit',
 						  })
 						: '',
 				footer: '',
