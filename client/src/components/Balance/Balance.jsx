@@ -26,7 +26,11 @@ import {
 	numberToPercentage,
 	numberToReais,
 	numberToDollars,
+	sumAllCosts,
 	sumTotalAmount,
+	sumTotalApplied,
+	sumTotalAppliedUSD,
+	sumTotalRescued,
 	groupBy,
 } from '../utils';
 
@@ -93,7 +97,7 @@ class Balance extends React.Component {
 		return response;
 	};
 
-	handleCallService = async (asset) => {
+	updateLastUnitPrice = async (asset) => {
 		let lastUnitPrice,
 			lastPriceDollar = 1;
 		const { _id, assetClass, description, lastAmount, ticker } = asset;
@@ -101,6 +105,7 @@ class Balance extends React.Component {
 
 		try {
 			if (description !== 'Caixa USD') {
+				const assetOperations = await onGetOperations(_id);
 				switch (assetClass) {
 					case BITCOIN:
 						lastUnitPrice = await onGetLastPriceBitcoin();
@@ -119,7 +124,6 @@ class Balance extends React.Component {
 						return;
 				}
 
-				const assetOperations = await onGetOperations(_id);
 				const lastAmount = sumTotalAmount(assetOperations);
 				const grossBalance = lastAmount * lastUnitPrice * lastPriceDollar;
 
@@ -141,10 +145,58 @@ class Balance extends React.Component {
 					lastRefreshedDate,
 				});
 			}
-			this.refreshAssets();
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	updateTotalAppliedWithCosts = async (asset) => {
+		const { _id, assetClass, description, lastAmount } = asset;
+		const lastRefreshedDate = new Date();
+
+		try {
+			const assetOperations = await onGetOperations(_id);
+			let totalAppliedWithCosts;
+
+			switch (assetClass) {
+				case USA:
+				case OURO:
+				case PRATA:
+					if (description !== 'Caixa USD') return;
+					totalAppliedWithCosts =
+						sumTotalAppliedUSD(assetOperations) + sumAllCosts(assetOperations);
+
+					await onPutAssets({
+						_id,
+						totalAppliedWithCosts,
+						lastRefreshedDate,
+					});
+					break;
+
+				default:
+					if (lastAmount === 0) totalAppliedWithCosts = 0;
+					else
+						totalAppliedWithCosts =
+							sumTotalApplied(assetOperations) -
+							sumTotalRescued(assetOperations) +
+							sumAllCosts(assetOperations);
+
+					await onPutAssets({
+						_id,
+						totalAppliedWithCosts,
+						lastRefreshedDate,
+					});
+					break;
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	handleCallService = async (asset) => {
+		await this.updateLastUnitPrice(asset);
+		await this.updateTotalAppliedWithCosts(asset);
+		this.refreshAssets();
 	};
 
 	render() {
@@ -189,6 +241,25 @@ class Balance extends React.Component {
 				formatter: (cell, row, rowIndex, formatExtraData) => {
 					if (!row.grossBalance) return '-';
 					return numberToReais(row.grossBalance);
+				},
+				footer: (columnData) => {
+					return numberToReais(
+						columnData.reduce((acc, row) => {
+							if (!row) return acc;
+							return acc + row;
+						}, 0)
+					);
+				},
+			},
+			{
+				dataField: 'totalAppliedWithCosts',
+				text: 'Total aplicado com custos',
+				align: 'right',
+				footerAlign: 'right',
+				editable: false,
+				formatter: (cell, row, rowIndex, formatExtraData) => {
+					if (!row.totalAppliedWithCosts) return '-';
+					return numberToReais(row.totalAppliedWithCosts);
 				},
 				footer: (columnData) => {
 					return numberToReais(
@@ -261,6 +332,8 @@ class Balance extends React.Component {
 			},
 		];
 
+		const { assets } = this.state;
+
 		return (
 			<Container>
 				<Button
@@ -273,7 +346,7 @@ class Balance extends React.Component {
 					<BootstrapTable
 						hover
 						keyField='_id'
-						data={this.state.assets}
+						data={assets}
 						columns={columns}
 						cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
 					/>

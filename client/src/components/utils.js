@@ -52,6 +52,13 @@ export const sumTotalApplied = (operations) => {
 	}, 0);
 };
 
+export const sumTotalAppliedUSD = (operations) => {
+	return operations.reduce((accumulator, operation) => {
+		if (operation.type === 'Aplicação') return accumulator + operation.brl;
+		else return accumulator;
+	}, 0);
+};
+
 export const sumTotalRescued = (operations) => {
 	return operations.reduce((accumulator, operation) => {
 		if (operation.type === 'Resgate') return accumulator + operation.value;

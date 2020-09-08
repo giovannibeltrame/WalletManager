@@ -42,6 +42,7 @@ import {
 	numberToReais,
 	numberToReais4Digits,
 	sumAllCosts,
+	sumTotalAppliedUSD,
 } from '../../utils';
 
 class CurrencyOperations extends React.Component {
@@ -367,13 +368,7 @@ class CurrencyOperations extends React.Component {
 	render() {
 		const { asset } = this.props;
 
-		const totalApplied = this.state.operations.reduce(
-			(accumulator, operation) => {
-				if (operation.type === 'Aplicação') return accumulator + operation.brl;
-				else return accumulator;
-			},
-			0
-		);
+		const totalApplied = sumTotalAppliedUSD(this.state.operations);
 
 		const totalDollars = this.state.operations.reduce(
 			(accumulator, operation) => {
