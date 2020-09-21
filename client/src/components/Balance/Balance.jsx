@@ -40,13 +40,17 @@ class Balance extends React.Component {
 
 		this.state = {
 			assets: [],
+			hiddenWithoutGrossBalance: false,
 		};
 	}
 
 	refreshAssets = async () => {
 		const assets = await onGetAssets();
+		const { hiddenWithoutGrossBalance } = this.state;
 		this.setState({
-			assets: assets.filter((item) => item),
+			assets: assets.filter((item) =>
+				hiddenWithoutGrossBalance ? item.grossBalance : item
+			),
 		});
 	};
 
@@ -151,8 +155,7 @@ class Balance extends React.Component {
 	};
 
 	updateTotalAppliedWithCosts = async (asset) => {
-		const { _id, assetClass, description, lastAmount } = asset;
-		const lastRefreshedDate = new Date();
+		const { _id, assetClass, description, grossBalance, lastAmount } = asset;
 
 		try {
 			const assetOperations = await onGetOperations(_id);
@@ -169,12 +172,11 @@ class Balance extends React.Component {
 					await onPutAssets({
 						_id,
 						totalAppliedWithCosts,
-						lastRefreshedDate,
 					});
 					break;
 
 				default:
-					if (lastAmount === 0) totalAppliedWithCosts = 0;
+					if (lastAmount === 0 || grossBalance === 0) totalAppliedWithCosts = 0;
 					else
 						totalAppliedWithCosts =
 							sumTotalApplied(assetOperations) -
@@ -184,7 +186,6 @@ class Balance extends React.Component {
 					await onPutAssets({
 						_id,
 						totalAppliedWithCosts,
-						lastRefreshedDate,
 					});
 					break;
 			}
@@ -196,6 +197,11 @@ class Balance extends React.Component {
 	handleCallService = async (asset) => {
 		await this.updateLastUnitPrice(asset);
 		await this.updateTotalAppliedWithCosts(asset);
+		this.refreshAssets();
+	};
+
+	handleHidden = (hiddenWithoutGrossBalance) => {
+		this.setState({ hiddenWithoutGrossBalance });
 		this.refreshAssets();
 	};
 
@@ -332,17 +338,25 @@ class Balance extends React.Component {
 			},
 		];
 
-		const { assets } = this.state;
+		const { assets, hiddenWithoutGrossBalance } = this.state;
 
 		return (
 			<Container>
-				<Button
-					variant='outline-primary'
-					onClick={() => history.push('/classes', this.mapClassesToData())}
-				>
-					Go to Classes
-				</Button>
 				<Row>
+					<Button
+						variant='outline-primary'
+						onClick={() => history.push('/classes', this.mapClassesToData())}
+					>
+						Go to Classes
+					</Button>
+					<Button
+						variant='outline-primary'
+						onClick={() => this.handleHidden(!hiddenWithoutGrossBalance)}
+					>
+						Esconder Saldo Zerado
+					</Button>
+				</Row>
+				<Row className='mt-3'>
 					<BootstrapTable
 						hover
 						keyField='_id'
