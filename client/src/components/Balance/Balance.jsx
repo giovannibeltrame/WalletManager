@@ -353,7 +353,7 @@ class Balance extends React.Component {
 						variant='outline-primary'
 						onClick={() => this.handleHidden(!hiddenWithoutGrossBalance)}
 					>
-						Esconder Saldo Zerado
+						Hide Without Gross Balance
 					</Button>
 				</Row>
 				<Row className='mt-3'>
