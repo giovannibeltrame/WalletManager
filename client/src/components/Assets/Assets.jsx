@@ -13,9 +13,11 @@ import {
 	BROKER_AVENUE,
 	BROKER_BANCO_INTER,
 	BROKER_BISCOINT,
+	BROKER_BTG,
 	BROKER_CLEAR,
 	BROKER_ORAMA,
 	BROKER_RICO,
+	BROKER_SOFISA,
 	BRL,
 	USD,
 } from '../constants';
@@ -211,9 +213,11 @@ class Assets extends React.Component {
 								<option>{BROKER_AVENUE}</option>
 								<option>{BROKER_BANCO_INTER}</option>
 								<option>{BROKER_BISCOINT}</option>
+								<option>{BROKER_BTG}</option>
 								<option>{BROKER_CLEAR}</option>
 								<option>{BROKER_ORAMA}</option>
 								<option>{BROKER_RICO}</option>
+								<option>{BROKER_SOFISA}</option>
 							</Form.Control>
 						</Col>
 					</Form.Row>
