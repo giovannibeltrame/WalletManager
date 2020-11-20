@@ -26,7 +26,7 @@ import {
 	DELETE_CLASS_SUCCESS,
 	DELETE_CLASS_ERROR,
 } from '../constants';
-import { numberToReais, numberToPercentage } from '../utils';
+import { numberToReais, numberToPercentage, numberToDecimal } from '../utils';
 
 class Classes extends React.Component {
 	state = {
@@ -46,8 +46,10 @@ class Classes extends React.Component {
 		this.setState({ description: event.target.value });
 	};
 
-	handleChangePercentage = (event) => {
-		this.setState({ percentage: event.target.value });
+	handleChangePercentage = (event, maskedvalue, floatvalue) => {
+		this.setState({
+			percentage: floatvalue,
+		});
 	};
 
 	handleSubmit = async (event) => {
@@ -115,7 +117,7 @@ class Classes extends React.Component {
 			return (
 				<tr key={item._id}>
 					<td>{item.description}</td>
-					<td>{item.percentage}%</td>
+					<td>{numberToDecimal(item.percentage)}%</td>
 					<td>
 						<Button
 							variant='outline-danger'
@@ -142,7 +144,7 @@ class Classes extends React.Component {
 					<b>Total</b>
 				</td>
 				<td>
-					<b>{percentageSum}%</b>
+					<b>{numberToDecimal(percentageSum)}%</b>
 				</td>
 				<td />
 			</tr>
@@ -233,18 +235,21 @@ class Classes extends React.Component {
 						placeholder='Classe de ativo'
 						className='mr-sm-2'
 					/>
-					<FormControl
-						onChange={this.handleChangePercentage}
-						type='number'
+					<CurrencyInput
+						className='form-control mr-sm-2'
 						placeholder='% Planejada'
-						className='mr-sm-2'
+						value={this.state.percentage}
+						onChangeEvent={this.handleChangePercentage}
+						decimalSeparator=','
+						thousandSeparator='.'
+						suffix='%'
 					/>
 					<Button variant='outline-primary' type='submit'>
 						Incluir
 					</Button>
 				</Form>
 
-				<Row style={{ height: 500 }}>
+				<Row style={{ height: 700 }}>
 					<Col>
 						<Table responsive hover className='mt-4'>
 							<tbody>
@@ -255,8 +260,8 @@ class Classes extends React.Component {
 					</Col>
 					<Col>
 						<ResponsivePie
-							colors={{ scheme: 'accent' }}
-							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							colors={{ scheme: 'paired' }}
+							margin={{ top: 30, right: 110, bottom: 30, left: 110 }}
 							data={this.mapClassesToData()}
 							innerRadius={0.3}
 							padAngle={1}
@@ -296,7 +301,7 @@ class Classes extends React.Component {
 				<Row className='mt-5' style={{ height: 500 }}>
 					<Col>
 						<ResponsivePie
-							colors={{ scheme: 'accent' }}
+							colors={{ scheme: 'paired' }}
 							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
 							data={classesGrossBalanceData}
 							innerRadius={0.3}
@@ -309,7 +314,7 @@ class Classes extends React.Component {
 					</Col>
 					<Col>
 						<ResponsivePie
-							colors={{ scheme: 'accent' }}
+							colors={{ scheme: 'paired' }}
 							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
 							data={this.state.simulateData}
 							innerRadius={0.3}
