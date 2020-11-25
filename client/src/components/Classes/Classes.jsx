@@ -249,7 +249,7 @@ class Classes extends React.Component {
 					</Button>
 				</Form>
 
-				<Row style={{ height: 700 }}>
+				<Row>
 					<Col>
 						<Table responsive hover className='mt-4'>
 							<tbody>
@@ -259,9 +259,21 @@ class Classes extends React.Component {
 						</Table>
 					</Col>
 					<Col>
+						<BootstrapTable
+							hover
+							keyField='id'
+							data={classesGrossBalanceData}
+							columns={percentageColumns}
+							defaultSorted={[{ dataField: 'label', order: 'asc' }]}
+						/>
+					</Col>
+				</Row>
+
+				<Row style={{ height: 400 }}>
+					<Col>
 						<ResponsivePie
 							colors={{ scheme: 'paired' }}
-							margin={{ top: 30, right: 110, bottom: 30, left: 110 }}
+							margin={{ top: 30, right: 120, bottom: 30, left: 120 }}
 							data={this.mapClassesToData()}
 							innerRadius={0.3}
 							padAngle={1}
@@ -271,18 +283,22 @@ class Classes extends React.Component {
 							tooltipFormat={(value) => value + '%'}
 						/>
 					</Col>
-				</Row>
-
-				<Row className='mt-5'>
 					<Col>
-						<BootstrapTable
-							hover
-							keyField='id'
+						<ResponsivePie
+							colors={{ scheme: 'paired' }}
+							margin={{ top: 30, right: 120, bottom: 30, left: 120 }}
 							data={classesGrossBalanceData}
-							columns={percentageColumns}
-							defaultSorted={[{ dataField: 'label', order: 'asc' }]}
+							innerRadius={0.3}
+							padAngle={1}
+							radialLabel={'label'}
+							radialLabelsLinkStrokeWidth={1}
+							enableSlicesLabels={false}
+							tooltipFormat={(value) => numberToPercentage(value)}
 						/>
 					</Col>
+				</Row>
+
+				<Row style={{ height: 400 }}>
 					<Col>
 						<BootstrapTable
 							hover
@@ -296,26 +312,10 @@ class Classes extends React.Component {
 							Simular
 						</Button>
 					</Col>
-				</Row>
-
-				<Row className='mt-5' style={{ height: 500 }}>
 					<Col>
 						<ResponsivePie
 							colors={{ scheme: 'paired' }}
-							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
-							data={classesGrossBalanceData}
-							innerRadius={0.3}
-							padAngle={1}
-							radialLabel={'label'}
-							radialLabelsLinkStrokeWidth={1}
-							enableSlicesLabels={false}
-							tooltipFormat={(value) => numberToPercentage(value)}
-						/>
-					</Col>
-					<Col>
-						<ResponsivePie
-							colors={{ scheme: 'paired' }}
-							margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
+							margin={{ top: 30, right: 120, bottom: 30, left: 120 }}
 							data={this.state.simulateData}
 							innerRadius={0.3}
 							padAngle={1}
