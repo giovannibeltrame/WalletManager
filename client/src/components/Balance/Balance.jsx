@@ -20,6 +20,11 @@ import {
 	OURO,
 	PRATA,
 	USA,
+	USD,
+	ALL_WORLD,
+	BONDS,
+	TREASURY,
+	TECH,
 } from '../constants';
 import {
 	numberToDecimal,
@@ -119,8 +124,13 @@ class Balance extends React.Component {
 						lastUnitPrice = await onGetLastPrice(ticker + '.SA');
 						break;
 					case USA:
+					case USD:
 					case OURO:
 					case PRATA:
+					case ALL_WORLD:
+					case BONDS:
+					case TREASURY:
+					case TECH:
 						lastUnitPrice = await onGetLastPrice(ticker);
 						lastPriceDollar = await onGetLastPriceDollar();
 						break;
@@ -163,8 +173,13 @@ class Balance extends React.Component {
 
 			switch (assetClass) {
 				case USA:
+				case USD:
 				case OURO:
 				case PRATA:
+				case ALL_WORLD:
+				case BONDS:
+				case TREASURY:
+				case TECH:
 					if (description !== 'Caixa USD') return;
 					totalAppliedWithCosts =
 						sumTotalAppliedUSD(assetOperations) + sumAllCosts(assetOperations);
