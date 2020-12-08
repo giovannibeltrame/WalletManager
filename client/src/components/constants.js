@@ -31,13 +31,17 @@ export const BROKER_RICO = 'Rico';
 export const BROKER_SOFISA = 'Sofisa';
 
 export const ACAO = 'Ações';
-export const BITCOIN = 'Bitcoin';
+export const CRIPTO = 'Criptomoedas';
 export const FUNDO_IMOBILIARIO = 'FIIs';
-export const OURO = 'Ouro';
-export const PRATA = 'Prata';
+export const OURO = 'Gold ETF';
+export const PRATA = 'Silver ETF';
 export const PREVIDENCIA_PRIVADA = 'Previdência Privada';
 export const RENDA_FIXA = 'Renda Fixa';
-export const USA = 'USD';
+export const USA = 'US Market ETF';
+export const ALL_WORLD = 'All World Market ETF';
+export const BONDS = 'Corporate Bonds ETF';
+export const TREASURY = 'Treasury Bond ETF';
+export const TECH = 'Technology ETF';
 
 export const TOTAL_APPLIED = 'VALOR APLICADO';
 export const TOTAL_APPLIED_DOLLARS = 'TOTAL COMPRADO EM DÓLARES';

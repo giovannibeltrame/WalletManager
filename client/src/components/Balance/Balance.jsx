@@ -15,7 +15,7 @@ import {
 
 import {
 	ACAO,
-	BITCOIN,
+	CRIPTO,
 	FUNDO_IMOBILIARIO,
 	OURO,
 	PRATA,
@@ -111,7 +111,7 @@ class Balance extends React.Component {
 			if (description !== 'Caixa USD') {
 				const assetOperations = await onGetOperations(_id);
 				switch (assetClass) {
-					case BITCOIN:
+					case CRIPTO:
 						lastUnitPrice = await onGetLastPriceBitcoin();
 						break;
 					case ACAO:
