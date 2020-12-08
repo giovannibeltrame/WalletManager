@@ -37,7 +37,7 @@ export const OURO = 'Ouro';
 export const PRATA = 'Prata';
 export const PREVIDENCIA_PRIVADA = 'Previdência Privada';
 export const RENDA_FIXA = 'Renda Fixa';
-export const USA = 'USA';
+export const USA = 'USD';
 
 export const TOTAL_APPLIED = 'VALOR APLICADO';
 export const TOTAL_APPLIED_DOLLARS = 'TOTAL COMPRADO EM DÓLARES';
