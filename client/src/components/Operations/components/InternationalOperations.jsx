@@ -553,11 +553,6 @@ class InternationalOperations extends React.Component {
 								decimalSeparator=','
 								thousandSeparator='.'
 								prefix='R$ '
-								disabled={
-									this.state.type === DIVIDEND || this.state.type === JSCP
-										? 'disabled'
-										: ''
-								}
 							/>
 						</Col>
 						<Col>
