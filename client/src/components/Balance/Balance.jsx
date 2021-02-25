@@ -254,14 +254,14 @@ class Balance extends React.Component {
 				footer: '',
 			},
 			{
-				dataField: 'grossBalance',
-				text: 'Saldo Bruto',
+				dataField: 'totalAppliedWithCosts',
+				text: 'Total aplicado com custos',
 				align: 'right',
 				footerAlign: 'right',
 				editable: false,
 				formatter: (cell, row, rowIndex, formatExtraData) => {
-					if (!row.grossBalance) return '-';
-					return numberToReais(row.grossBalance);
+					if (!row.totalAppliedWithCosts) return '-';
+					return numberToReais(row.totalAppliedWithCosts);
 				},
 				footer: (columnData) => {
 					return numberToReais(
@@ -273,14 +273,14 @@ class Balance extends React.Component {
 				},
 			},
 			{
-				dataField: 'totalAppliedWithCosts',
-				text: 'Total aplicado com custos',
+				dataField: 'grossBalance',
+				text: 'Saldo Bruto',
 				align: 'right',
 				footerAlign: 'right',
 				editable: false,
 				formatter: (cell, row, rowIndex, formatExtraData) => {
-					if (!row.totalAppliedWithCosts) return '-';
-					return numberToReais(row.totalAppliedWithCosts);
+					if (!row.grossBalance) return '-';
+					return numberToReais(row.grossBalance);
 				},
 				footer: (columnData) => {
 					return numberToReais(
