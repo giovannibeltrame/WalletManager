@@ -12,6 +12,7 @@ import {
 	DELETE_ASSET_ERROR,
 	BROKER_AVENUE,
 	BROKER_BANCO_INTER,
+	BROKER_BINANCE,
 	BROKER_BISCOINT,
 	BROKER_BTG,
 	BROKER_CLEAR,
@@ -212,6 +213,7 @@ class Assets extends React.Component {
 								<option />
 								<option>{BROKER_AVENUE}</option>
 								<option>{BROKER_BANCO_INTER}</option>
+								<option>{BROKER_BINANCE}</option>
 								<option>{BROKER_BISCOINT}</option>
 								<option>{BROKER_BTG}</option>
 								<option>{BROKER_CLEAR}</option>

@@ -23,6 +23,7 @@ export const REFRESH_LAST_AMOUNT_ERROR = 'Erro ao tentar atualizar saldo atual';
 
 export const BROKER_AVENUE = 'Avenue';
 export const BROKER_BANCO_INTER = 'Banco Inter';
+export const BROKER_BINANCE = 'Binance';
 export const BROKER_BISCOINT = 'Biscoint';
 export const BROKER_BTG = 'BTG Pactual';
 export const BROKER_CLEAR = 'Clear';
