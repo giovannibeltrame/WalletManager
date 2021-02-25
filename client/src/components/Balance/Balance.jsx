@@ -9,7 +9,7 @@ import { onGetAssets, onPutAssets } from '../Assets/AssetsController';
 import {
 	onGetOperations,
 	onGetLastPrice,
-	onGetLastPriceBitcoin,
+	onGetLastPriceCryptos,
 	onGetLastPriceDollar,
 } from '../Operations/OperationsController';
 
@@ -117,7 +117,7 @@ class Balance extends React.Component {
 				const assetOperations = await onGetOperations(_id);
 				switch (assetClass) {
 					case CRIPTO:
-						lastUnitPrice = await onGetLastPriceBitcoin();
+						lastUnitPrice = await onGetLastPriceCryptos(description);
 						break;
 					case ACAO:
 					case FUNDO_IMOBILIARIO:

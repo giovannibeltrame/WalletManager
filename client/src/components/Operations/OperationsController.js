@@ -68,14 +68,21 @@ export const onGetLastPrice = async (ticker) => {
 	return lastPrice;
 };
 
-export const onGetLastPriceBitcoin = async () => {
+export const onGetLastPriceCryptos = async (description) => {
+	let ticker;
+	if (description === 'Bitcoin') ticker = 'BTC';
+	else if (description === 'Ethereum') ticker = 'ETH';
+	else if (description === 'Litecoin') ticker = 'LTC';
+
 	const response = await alphavantage.get(
-		'&function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=BRL'
+		'&function=CURRENCY_EXCHANGE_RATE&from_currency=' +
+			ticker +
+			'&to_currency=BRL'
 	);
 	const objectKey = 'Realtime Currency Exchange Rate';
 	const lastPrice = Number(response.data[objectKey]['5. Exchange Rate']);
 
-	console.log('last price btc/brl: ' + lastPrice);
+	console.log('last price ' + ticker + '/BRL: ' + lastPrice);
 	return lastPrice;
 };
 
