@@ -73,6 +73,7 @@ export const onGetLastPriceCryptos = async (description) => {
 	if (description === 'Bitcoin') ticker = 'BTC';
 	else if (description === 'Ethereum') ticker = 'ETH';
 	else if (description === 'Litecoin') ticker = 'LTC';
+	else if (description === 'ChainLink') ticker = 'LINK';
 
 	const response = await alphavantage.get(
 		'&function=CURRENCY_EXCHANGE_RATE&from_currency=' +
