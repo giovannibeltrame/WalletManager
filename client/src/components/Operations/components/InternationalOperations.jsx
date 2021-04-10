@@ -520,7 +520,7 @@ class InternationalOperations extends React.Component {
 								onChangeEvent={this.handleChangeSettlementFee}
 								decimalSeparator=','
 								thousandSeparator='.'
-								prefix='R$ '
+								prefix='US$ '
 								disabled={
 									this.state.type === DIVIDEND || this.state.type === JSCP
 										? 'disabled'
@@ -536,7 +536,7 @@ class InternationalOperations extends React.Component {
 								onChangeEvent={this.handleChangeEmoluments}
 								decimalSeparator=','
 								thousandSeparator='.'
-								prefix='R$ '
+								prefix='US$ '
 								disabled={
 									this.state.type === DIVIDEND || this.state.type === JSCP
 										? 'disabled'
@@ -552,7 +552,7 @@ class InternationalOperations extends React.Component {
 								onChangeEvent={this.handleChangeTaxes}
 								decimalSeparator=','
 								thousandSeparator='.'
-								prefix='R$ '
+								prefix='US$ '
 							/>
 						</Col>
 						<Col>
@@ -563,7 +563,7 @@ class InternationalOperations extends React.Component {
 								onChangeEvent={this.handleChangeBrokerage}
 								decimalSeparator=','
 								thousandSeparator='.'
-								prefix='R$ '
+								prefix='US$ '
 								disabled={
 									this.state.type === DIVIDEND || this.state.type === JSCP
 										? 'disabled'
@@ -578,7 +578,7 @@ class InternationalOperations extends React.Component {
 								value={this.state.costs}
 								decimalSeparator=','
 								thousandSeparator='.'
-								prefix='R$ '
+								prefix='US$ '
 								disabled
 							/>
 						</Col>
