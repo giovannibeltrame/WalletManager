@@ -18,6 +18,7 @@ import {
 	BROKER_CLEAR,
 	BROKER_ORAMA,
 	BROKER_RICO,
+	BROKER_SANTANDER,
 	BROKER_SOFISA,
 	BRL,
 	USD,
@@ -219,6 +220,7 @@ class Assets extends React.Component {
 								<option>{BROKER_CLEAR}</option>
 								<option>{BROKER_ORAMA}</option>
 								<option>{BROKER_RICO}</option>
+								<option>{BROKER_SANTANDER}</option>
 								<option>{BROKER_SOFISA}</option>
 							</Form.Control>
 						</Col>

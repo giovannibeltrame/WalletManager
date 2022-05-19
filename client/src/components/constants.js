@@ -29,6 +29,7 @@ export const BROKER_BTG = 'BTG Pactual';
 export const BROKER_CLEAR = 'Clear';
 export const BROKER_ORAMA = 'Órama';
 export const BROKER_RICO = 'Rico';
+export const BROKER_SANTANDER = 'Santander';
 export const BROKER_SOFISA = 'Sofisa';
 
 export const ACAO = 'Ações';
